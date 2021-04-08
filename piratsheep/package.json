@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Macy Website Client",
   "scripts": {
-    "dev": "webpack-dev-server --content-base app/",
+    "dev": "webpack serve --content-base app/",
     "build": "webpack --mode=development",
     "watch": "webpack --mode=development -w",
     "release": "webpack --mode=production"

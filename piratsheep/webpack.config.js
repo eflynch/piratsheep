@@ -1,11 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
-var WebpackNotifierPlugin = require('webpack-notifier');
+// var WebpackNotifierPlugin = require('webpack-notifier');
 
 var BUILD_DIR = path.resolve(__dirname, 'app')
 var APP_DIR = path.resolve(__dirname, 'src')
 
 var config = {
+    mode: 'development',
     entry: APP_DIR + '/main.js',
     output: {
         path: BUILD_DIR,
@@ -20,9 +21,9 @@ var config = {
             },
         ]
     },
-    plugins: [
-        new WebpackNotifierPlugin(),
-    ]
+    // plugins: [
+    //     new WebpackNotifierPlugin(),
+    // ]
 };
 
 module.exports = config;

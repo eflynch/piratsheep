@@ -8,22 +8,13 @@ const CHANGE = 'CHANGE';
 class Store extends EventEmitter {
     constructor() {
         super();
-
         Dispatcher.register(this._handleAction.bind(this));
-        this._sessionWrapper = null;
     }
 
-    _handleAction(action) {
-        switch(action.actionType) {
-            case ActionTypes.ACTION: {
-                this.emit(CHANGE);
-                break;
-            }
-        }
-    }
+    _handleAction(action) {}
 
     getState() {
-        return {};
+        return {}
     }
 
     addOnChange(callback) {
