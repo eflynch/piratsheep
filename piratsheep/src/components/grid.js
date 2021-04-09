@@ -3,8 +3,7 @@ import React from 'react';
 const Grid = ({data, cursor, ...props}) => {
     return (
         <div className="grid" {...props}>
-            {data.map((row, y_rev)=>{
-            const y = data.length - y_rev - 1;
+            {data.map((row, y)=>{
             return (
                 <div className="row" key={y}>
                     {row.map((d, x) => {

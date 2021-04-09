@@ -50,12 +50,20 @@ const App = ({}) => {
     }, {allowRepeat:true});
 
     useKeybinding("ArrowUp", "", (keys)=>{
-        setCursor({y: Math.min(cursor.y + 1, data.length-1), x: cursor.x });
+        setCursor({y: Math.max(0, cursor.y - 1), x: cursor.x });
     }, {allowRepeat:true});
 
     useKeybinding("ArrowDown", "", (keys)=>{
-        setCursor({y: Math.max(0, cursor.y - 1), x: cursor.x });
+        setCursor({y: Math.min(cursor.y + 1, data.length-1), x: cursor.x });
     }, {allowRepeat:true});
+
+    useKeybinding("X", "", (keys)=>{
+        dispatch({type:"write", x: cursor.x, y: cursor.y, v:"x"});
+    });
+
+    useKeybinding("D", "", (keys)=>{
+        dispatch({type:"write", x: cursor.x, y: cursor.y, v:""});
+    })
 
     return (
         <Grid data={data} cursor={cursor} />

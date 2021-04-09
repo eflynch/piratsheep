@@ -19,7 +19,7 @@ const useKeybinding = (goKeys, stopKeys, callback, options) => {
         
                 return {
                     keys: {...initialGoKeys, ...initialStopKeys},
-                    repeat: state.repeat
+                    repeat: false 
                 };
             }
             case 'repeat':
@@ -29,7 +29,7 @@ const useKeybinding = (goKeys, stopKeys, callback, options) => {
             case 'down':
                 return update(state, {keys: {[action.key]: {$set: true}}});
         }
-    }, {keys:{}, repeat: false});
+    }, null);
 
 
     useEffect(()=>{
@@ -71,6 +71,9 @@ const useKeybinding = (goKeys, stopKeys, callback, options) => {
     }, [goKeys, stopKeys]);
 
     useEffect(() => {
+        if (state === null){
+            return;
+        }
         if (!Object.values(state.keys).filter(value => !value).length) {
             callback(state.keys);
         }
