@@ -1,48 +1,45 @@
-import React, {useEffect, useReducer, useState, useMemo} from 'react';
-import update from 'immutability-helper';
+import React, {useEffect, useReducer, useState, useRef} from 'react';
 
+import {deserialize, reducer, create} from '../piratsheep';
 import useKeybinding from '../useKeybinding';
+import Grid from './grid';
 
-const serialize = data => data.map(row=>row.join("")).join("\n");
-const deserialize = data => data.split("\n").map(row=>row.split(""));
+const initialState = create(20,20);
 
-const reducer = (action, state) => {
-    switch (action.type) {
-        case "step":
-            return step(state);
-        case "write":
-            return update(state, {
-                [action.x]: {[action.y] : {$set: action.v}}
-            });
-    }
-    return state;
-};
-
-const Grid = ({data, cursor, ...props}) => {
-    return (
-        <div className="grid" {...props}>
-            {data.map((row, y_rev)=>{
-            const y = data.length - y_rev - 1;
-            return (
-                <div className="row" key={y}>
-                    {row.map((d, x) => {
-                        return (
-                            <div className={"cell" + (cursor.x == x && cursor.y == y ? " cursor" : "")} key={x}>
-                                {d}
-                            </div>
-                        );
-                    })}
-                </div>
-            )
-        })}
-        </div>
-    );  
-};
+const useInterval = (callback, delay) => {
+    const savedCallback = useRef();
+  
+    // Remember the latest callback.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+  
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+ };
 
 const App = ({}) => {
-    const initialState = deserialize('hello\nworld');
     const [data, dispatch] = useReducer(reducer, initialState);
     const [cursor, setCursor] = useState({x: 0, y: 0});
+    const [paused, setPaused] = useState(false);
+
+    useInterval(()=>{
+        if (!paused){
+            dispatch({type:"step"}); 
+        }
+    }, 100);
+
+    useKeybinding(" ", "", (keys)=> {
+        setPaused(!paused);
+    });
 
     useKeybinding("ArrowLeft", "", (keys)=>{
         setCursor({x: Math.max(0, cursor.x - 1), y: cursor.y });
@@ -61,7 +58,7 @@ const App = ({}) => {
     }, {allowRepeat:true});
 
     return (
-        <Grid data={data} cursor={cursor} style={{height:"80%", width:"80%"}}/>
+        <Grid data={data} cursor={cursor} />
     );
 };
 

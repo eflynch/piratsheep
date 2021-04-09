@@ -39,8 +39,10 @@ const useKeybinding = (goKeys, stopKeys, callback, options) => {
     const keydownListener = useCallback((k, go=true) => e => {
         const {key, repeat} = e;
         const kL = k.toLowerCase();
-        if (!options.allowRepeat && repeat) {
-            return;
+        if (repeat) {
+            if(options === undefined || options.allowRepeat === undefined || !options.allowRepeat) {
+                return;
+            }
         }
         if (kL !== key.toLowerCase()) { return; }
         if (go) {
